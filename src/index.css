@@ -1,0 +1,220 @@
+/* ─── Google Fonts ──────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────────── */
+:root {
+  --accent:        #74F32B;
+  --accent-dark:   #5ecf1c;
+  --dark-green:    #123D1D;
+  --deep-navy:     #050816;
+  --soft-green-bg: #F3FFE9;
+  --muted:         #6B7280;
+  --white-glass:   rgba(255,255,255,0.76);
+  --border-glass:  rgba(18,61,29,0.10);
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  color: var(--deep-navy);
+  background: #ffffff;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #ffffff;
+}
+html { scroll-behavior: smooth; }
+button, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+/* ─── Global glass card ──────────────────────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,0.76);
+  border: 1px solid rgba(255,255,255,0.60);
+  box-shadow: 0 20px 60px rgba(18,61,29,0.10), 0 1px 0 rgba(255,255,255,0.80) inset;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.glass-card-green {
+  background: rgba(243,255,233,0.82);
+  border: 1px solid rgba(116,243,43,0.22);
+  box-shadow: 0 0 35px rgba(116,243,43,0.18), 0 20px 60px rgba(18,61,29,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.soft-panel {
+  background: rgba(243,255,233,0.74);
+  border: 1px solid rgba(116,243,43,0.28);
+}
+
+.green-glow {
+  box-shadow: 0 0 35px rgba(116,243,43,0.35), 0 18px 42px rgba(116,243,43,0.20);
+}
+
+/* ─── App surface (portals) ──────────────────────────────────── */
+.app-surface {
+  background:
+    radial-gradient(circle at 5% 8%, rgba(116,243,43,0.10), transparent 28rem),
+    radial-gradient(circle at 95% 15%, rgba(18,61,29,0.06), transparent 22rem),
+    #ffffff;
+  min-height: 100vh;
+}
+
+/* ─── Text utilities ─────────────────────────────────────────── */
+.text-balance { text-wrap: balance; }
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   HORIZONTAL SCROLL LANDING
+   Technique: scroll-driven via a tall outer wrapper that pins
+   an inner container, which translates on scroll.
+   The user scrolls vertically; the viewport moves horizontally.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Outer scroller — height drives the total scroll distance */
+.landing-scroll-driver {
+  position: relative;
+}
+
+/* The sticky viewport window */
+.landing-sticky-viewport {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* The horizontal track — JS translates this on scroll */
+.landing-h-track {
+  display: flex;
+  flex-direction: row;
+  height: 100dvh;
+  will-change: transform;
+}
+
+/* Each horizontal panel */
+.landing-panel {
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+/* Hero background */
+.hero-bg {
+  background-image:
+    linear-gradient(105deg,
+      rgba(5,8,22,0.88) 0%,
+      rgba(5,8,22,0.60) 40%,
+      rgba(18,61,29,0.22) 100%),
+    url("/src/assets/rca-building.png");
+  background-size: cover;
+  background-position: center 30%;
+}
+
+/* ─── Landing navbar (fixed above everything) ────────────────── */
+.landing-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-navbar-inner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1280px;
+  gap: 0.5rem;
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.70);
+  box-shadow:
+    0 4px 32px rgba(18,61,29,0.10),
+    0 1px 0 rgba(255,255,255,0.90) inset;
+  border-radius: 999px;
+  padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+}
+
+/* ─── Portal grid layout ─────────────────────────────────────── */
+.portal-grid {
+  display: grid;
+  grid-template-columns: minmax(220px,280px) minmax(0,1fr) minmax(220px,300px);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .portal-grid {
+    grid-template-columns: minmax(0,1fr);
+  }
+}
+
+/* ─── Scrollbar styling ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(18,61,29,0.22); border-radius: 99px; }
+
+/* ─── Animation keyframes ────────────────────────────────────── */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes float-y-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-14px) rotate(3deg); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(116,243,43,0.30); }
+  50%       { box-shadow: 0 0 50px rgba(116,243,43,0.55); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes counter-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.float-anim       { animation: float-y 3.5s ease-in-out infinite; }
+.float-anim-slow  { animation: float-y-slow 5s ease-in-out infinite; }
+.pulse-glow-anim  { animation: pulse-glow 2.8s ease-in-out infinite; }
+.spin-slow-anim   { animation: spin-slow 18s linear infinite; }
+
+/* ─── Responsive mobile fallback ─────────────────────────────── */
+@media (max-width: 768px) {
+  .landing-panel {
+    height: 100svh;
+  }
+  .landing-sticky-viewport {
+    height: 100svh;
+  }
+  .landing-h-track {
+    height: 100svh;
+  }
+}
