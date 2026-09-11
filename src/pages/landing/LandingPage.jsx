@@ -133,7 +133,7 @@ function Panel({ id, children, className = "" }) {
   return (
     <section
       id={id}
-      className={`landing-panel flex-col overflow-y-auto overflow-x-hidden ${className}`}
+      className={`landing-panel flex-col ${className}`}
     >
       {children}
     </section>
@@ -825,38 +825,32 @@ function FinalCTAPanel() {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   ROOT LANDING PAGE — SCROLL DRIVER
+   ROOT LANDING PAGE — HORIZONTAL SCROLL
    ════════════════════════════════════════════════════════════════ */
 const PANEL_COUNT = 7;
 
 export default function LandingPage() {
-  const driverRef   = useRef(null);
   const trackRef    = useRef(null);
   const rafRef      = useRef(null);
   const [currentPanel, setCurrentPanel] = useState(0);
 
   useEffect(() => {
-    const driver = driverRef.current;
     const track  = trackRef.current;
-    if (!driver || !track) return;
+    if (!track) return;
 
     function onScroll() {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
-        const scrollTop   = driver.scrollTop;
-        const scrollRange = driver.scrollHeight - driver.clientHeight;
-        const progress    = scrollRange > 0 ? scrollTop / scrollRange : 0;
-        const maxTranslate = (PANEL_COUNT - 1) * window.innerWidth;
-        const translateX  = progress * maxTranslate;
-
-        track.style.transform = `translateX(-${translateX}px)`;
+        const scrollLeft   = track.scrollLeft;
+        const scrollRange = track.scrollWidth - track.clientWidth;
+        const progress    = scrollRange > 0 ? scrollLeft / scrollRange : 0;
         setCurrentPanel(Math.round(progress * (PANEL_COUNT - 1)));
       });
     }
 
-    driver.addEventListener("scroll", onScroll, { passive: true });
+    track.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      driver.removeEventListener("scroll", onScroll);
+      track.removeEventListener("scroll", onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -866,31 +860,18 @@ export default function LandingPage() {
       {/* Floating navbar — always on top */}
       <LandingNavbar currentPanel={currentPanel} />
 
-      {/* Scroll driver: tall outer div that creates vertical scroll distance */}
+      {/* Horizontal scroll container */}
       <div
-        ref={driverRef}
-        className="h-screen overflow-y-scroll"
-        style={{ scrollbarWidth: "none" }}
+        ref={trackRef}
+        className="landing-h-scroll-container"
       >
-        {/* The tall inner div drives scroll height */}
-        <div
-          className="landing-scroll-driver"
-          style={{ height: `${PANEL_COUNT * 100}vh` }}
-        >
-          {/* Sticky viewport that sticks while user scrolls */}
-          <div className="landing-sticky-viewport">
-            {/* The horizontal track — translated by JS */}
-            <div ref={trackRef} className="landing-h-track">
-              <HeroPanel />
-              <AboutPanel />
-              <CategoriesPanel />
-              <HowItWorksPanel />
-              <PortalsPanel />
-              <ImpactPointsPanel />
-              <FinalCTAPanel />
-            </div>
-          </div>
-        </div>
+        <HeroPanel />
+        <AboutPanel />
+        <CategoriesPanel />
+        <HowItWorksPanel />
+        <PortalsPanel />
+        <ImpactPointsPanel />
+        <FinalCTAPanel />
       </div>
 
       {/* Scroll progress dots */}
