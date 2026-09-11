@@ -81,30 +81,25 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 /* ════════════════════════════════════════════════════════════════
    HORIZONTAL SCROLL LANDING
-   Technique: scroll-driven via a tall outer wrapper that pins
-   an inner container, which translates on scroll.
-   The user scrolls vertically; the viewport moves horizontally.
+   Technique: native horizontal scrolling with flex layout
+   The user scrolls horizontally to navigate between panels.
    ════════════════════════════════════════════════════════════════ */
 
-/* Outer scroller — height drives the total scroll distance */
-.landing-scroll-driver {
-  position: relative;
-}
-
-/* The sticky viewport window */
-.landing-sticky-viewport {
-  position: sticky;
-  top: 0;
-  height: 100dvh;
-  overflow: hidden;
-}
-
-/* The horizontal track — JS translates this on scroll */
-.landing-h-track {
+/* The horizontal scroll container */
+.landing-h-scroll-container {
   display: flex;
   flex-direction: row;
+  width: 100vw;
   height: 100dvh;
-  will-change: transform;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.landing-h-scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 /* Each horizontal panel */
@@ -116,6 +111,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   overflow: hidden;
   display: flex;
   align-items: stretch;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* Hero background */
